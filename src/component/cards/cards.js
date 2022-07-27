@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./cards.css";
-import { Dropdown } from "bootstrap";
 
 function Cards() {
   const [data, setData] = useState([]);
@@ -16,34 +15,68 @@ function Cards() {
       });
   };
 
+  useEffect(() => {
+    getNews();
+}, []);
+
+function sortData(e) {
+    e.preventDefault();
+    setSort(e.target.dataset.sort); 
+switch (sort) {
+  case "date":
+    let dataByDate = data
+      .sort((a, b) => {
+        return a.publishedAt < b.publishedAt ? 1 : -1;
+      })
+      .reverse();
+    setData(dataByDate);
+    break;
+  case "alpha":
+    let dataByAlpha = data
+      .sort((a, b) => {
+        return a.title > b.title ? -1 : 1;
+      })
+      .reverse();
+    setData(dataByAlpha);
+    break;
+            default: setData(data);
+
+}
+    console.log("sorted data", data);
+}
+
+//   Dates.sort(function(a1,a2){
+//     return new Date(b.date) - new Date(a.date);
+//   });
+
   return (
     <div>
       <button className="button" onClick={getNews}>
         Fetch News
       </button>
-      <div class="dropdown">
-        <button
-          class="btn btn-secondary dropdown-toggle"
-          type="button"
-          id="dropdownMenuButton"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          Dropdown button
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="#">
-            Action
-          </a>
-          <a class="dropdown-item" href="#">
-            Another action
-          </a>
-          <a class="dropdown-item" href="#">
-            Something else here
-          </a>
-        </div>
-      </div>
+
+      <div className="dropdown">
+				<button
+					className="btn btn-secondary dropdown-toggle"
+					type="button"
+					id="dropdownMenuButton1"
+					data-bs-toggle="dropdown"
+					aria-expanded="false"
+				>
+					Dropdown button
+				</button>
+				<ul
+					className="dropdown-menu"
+					aria-labelledby="dropdownMenuButton1"
+				>
+					<li>
+						<a className="dropdown-item" onClick={sortData} data-sort="date">Date Published</a>
+					</li>
+					<li>
+						<a className="dropdown-item" onClick={sortData} data-sort="alpha">Alphabetically</a>
+					</li>
+				</ul>
+			</div>
 
       <div className="container">
         <div className="row">
@@ -57,7 +90,9 @@ function Cards() {
                 />
                 <div className="card-body">
                   <h5 className="card-title">{value.title}</h5>
+                  <h5 className="card-date">{value.published}</h5>
                   <p className="card-text">{value.description}</p>
+                  <p className="card-date">{value.publishedAt}</p>
                   <a
                     href={value.url}
                     target="_blank"
