@@ -19,64 +19,73 @@ function Cards() {
     getNews();
 }, []);
 
-function sortData(e) {
-    e.preventDefault();
-    setSort(e.target.dataset.sort); 
-switch (sort) {
-  case "date":
-    let dataByDate = data
-      .sort((a, b) => {
-        return a.publishedAt < b.publishedAt ? 1 : -1;
-      })
-      .reverse();
-    setData(dataByDate);
-    break;
-  case "alpha":
-    let dataByAlpha = data
-      .sort((a, b) => {
-        return a.title > b.title ? -1 : 1;
-      })
-      .reverse();
-    setData(dataByAlpha);
-    break;
-            default: setData(data);
+// function sortData(e) {
+//     e.preventDefault();
+//     setSort(e.target.dataset.sort); 
+// switch (sort) {
+//   case "date":
+//     let dataByDate = data
+//       .sort((a, b) => {
+//         return a.publishedAt < b.publishedAt ? 1 : -1;
+//       })
+//       .reverse();
+//     setData(dataByDate);
+//     break;
+//   case "alpha":
+//     let dataByAlpha = data
+//       .sort((a, b) => {
+//         return a.title > b.title ? -1 : 1;
+//       })
+//       .reverse();
+//     setData(dataByAlpha);
+//     break;
+//             default: setData(data);
 
-}
-    console.log("sorted data", data);
-}
+// }
+//     console.log("sorted data", data);
+// }
 
-//   Dates.sort(function(a1,a2){
-//     return new Date(b.date) - new Date(a.date);
-//   });
+
+function Alpha() {
+  const [news, setNews] = useState([]);
+  const [isAlpha, setIsAlpha] = useState(false);
+
+  useEffect(() => {
+    axios.get('https://newsapi.org/v2/top-headlines?country=us&apiKey=35683222129440eda7a4be80f0a8a48f').then((res) => {
+      setNews(res?.data?.articles ?? []);
+    });
+  }, []);
 
   return (
     <div>
-      <button className="button" onClick={getNews}>
-        Fetch News
-      </button>
+      <button onClick={() => setIsAlpha(true)}>Sort Alphabetical</button>
+      <ul>
+      {isAlpha
+        ? news.sort(
+            (a, b) =>
+              a.title.length - b.title.length || a.title.localeCompare(b.title),
+          ).map(n => <li>n.content</li>)
+        : news.sort(
+            (a, b) => new Date(a.publishedAt) - new Date(b.publishedAt),
+          ).map(n => <li>n.content</li>)}
+    </ul>
+    </div>
+  );
+}
 
-      <div className="dropdown">
-				<button
-					className="btn btn-secondary dropdown-toggle"
-					type="button"
-					id="dropdownMenuButton1"
-					data-bs-toggle="dropdown"
-					aria-expanded="false"
-				>
-					Dropdown button
-				</button>
-				<ul
-					className="dropdown-menu"
-					aria-labelledby="dropdownMenuButton1"
-				>
-					<li>
-						<a className="dropdown-item" onClick={sortData} data-sort="date">Date Published</a>
-					</li>
-					<li>
-						<a className="dropdown-item" onClick={sortData} data-sort="alpha">Alphabetically</a>
-					</li>
-				</ul>
-			</div>
+
+
+
+  return (
+    <div>
+      <h1>Sort</h1>
+      <button className="btn btn-primary" onClick={getNews}>Top News</button>
+				 
+			{/* <button className="btn btn-primary" onClick={sortData} data-sort="date">Date Published</button> */}
+				
+			<button className="btn btn-primary" onClick={Alpha} data-sort="alpha">Alphabetically</button>
+			
+			
 
       <div className="container">
         <div className="row">
