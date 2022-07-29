@@ -19,31 +19,31 @@ function Cards() {
     getNews();
 }, []);
 
-// function sortData(e) {
-//     e.preventDefault();
-//     setSort(e.target.dataset.sort); 
-// switch (sort) {
-//   case "date":
-//     let dataByDate = data
-//       .sort((a, b) => {
-//         return a.publishedAt < b.publishedAt ? 1 : -1;
-//       })
-//       .reverse();
-//     setData(dataByDate);
-//     break;
-//   case "alpha":
-//     let dataByAlpha = data
-//       .sort((a, b) => {
-//         return a.title > b.title ? -1 : 1;
-//       })
-//       .reverse();
-//     setData(dataByAlpha);
-//     break;
-//             default: setData(data);
+function sortData(e) {
+    e.preventDefault();
+    setSort(e.target.dataset.sort); 
+switch (sort) {
+  case "date":
+    let dataByDate = data
+      .sort((a, b) => {
+        return a.publishedAt < b.publishedAt ? 1 : -1;
+      })
+      .reverse();
+    setData(dataByDate);
+    break;
+  case "alpha":
+    let dataByAlpha = data
+      .sort((a, b) => {
+        return a.title > b.title ? -1 : 1;
+      })
+      .reverse();
+    setData(dataByAlpha);
+    break;
+            default: setData(data);
 
-// }
-//     console.log("sorted data", data);
-// }
+}
+    console.log("sorted data", data);
+}
 
 
 function Alpha() {
